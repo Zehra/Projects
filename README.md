@@ -1,10 +1,11 @@
-# Projects
-A collection of projects
-
+# SECURE
+## **S**erver **E**xtension **C**reating **U**nified **R**ules **E**nforcement
 
 ## Author:
 * Zehra
 
 ## About:
-This is a collection of several projects which have been created and written by me.
-Although the idea might not be mine, the work is.
+A project to enhance servers.
+
+## Notes:
+This project is based on a previous project which was not completed.
