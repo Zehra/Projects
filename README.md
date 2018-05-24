@@ -1,10 +1,9 @@
-# Projects
-A collection of projects
+# BZFS-Plugins
+A collection of plug-ins updated by Zehra for BZFS
 
 
 ## Author:
 * Zehra
 
 ## About:
-This is a collection of several projects which have been created and written by me.
-Although the idea might not be mine, the work is.
+Some plug-ins were out of date, so they were updated.
