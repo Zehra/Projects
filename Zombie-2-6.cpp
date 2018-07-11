@@ -778,7 +778,8 @@ void Zombie::Event(bz_EventData *eventData) {
                 bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, "| $$  | $$| $$  | $$| $$ | $$ | $$ /$$__  $$| $$  | $$ \\____  $$      | $$$/ \\  $$$| $$| $$  | $$     ");
                 bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, "| $$  | $$|  $$$$$$/| $$ | $$ | $$|  $$$$$$$| $$  | $$ /$$$$$$$/      | $$/   \\  $$| $$| $$  | $$  /$$");
                 bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, "|__/  |__/ \\______/ |__/ |__/ |__/ \\_______/|__/  |__/|_______/       |__/     \\__/|__/|__/  |__/ |__/");
-                bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, "------------------------------------------------------------------------------------------------------");								bz_debugMessage(1, "ZOMBIEDEBUG: Humans won the game");
+                bz_sendTextMessage(BZ_SERVER, BZ_ALLUSERS, "------------------------------------------------------------------------------------------------------");
+                bz_debugMessage(1, "ZOMBIEDEBUG: Humans won the game");
             }
             if (bz_getTeamCount(eRogueTeam) > 1 || bz_getTeamCount(eGreenTeam) > 1 || bz_getTeamCount(eRedTeam) > 1)
             {
