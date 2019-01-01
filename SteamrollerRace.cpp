@@ -1,5 +1,5 @@
-// SteamrollerRace.cpp :
-
+// steamrollerRace.cpp : Defines the entry point for the DLL application.
+//
 #include "bzfsAPI.h"
 #include "plugin_utils.h"
 #include <map>
@@ -43,9 +43,12 @@ bool sortPlayersByScore(const Player& p1, const Player& p2)
   return p1.score > p2.score;
 }
 
-class SteamrollerRace : public bz_Plugin, bz_CustomSlashCommandHandler, public bz_CustomMapObjectHandler
+/** Main hander class definition **/
+
+class steamrollerRaceHandler : public bz_Plugin, public bz_CustomSlashCommandHandler, public bz_CustomMapObjectHandler
 {
-  virtual const char* Name() { return "SteamrollerRace"; }
+private:
+
 public:
   // Current spawn point ID
   int currentID;
@@ -77,17 +80,22 @@ public:
 
   std::queue<KillTime> killTimes;
 
-  SteamrollerRace();
+  steamrollerRaceHandler();
+  virtual const char* Name() { return "steamrollerRace"; }
   virtual void Init(const char* /*config*/);
-  virtual void Event(bz_EventData *eventData);
   virtual void Cleanup(void);
+  virtual void Event(bz_EventData *eventData);
   virtual bool SlashCommand(int playerID, bz_ApiString command, bz_ApiString message, bz_APIStringList* params);
   virtual bool MapObject(bz_ApiString object, bz_CustomMapObjectInfo *data);
+
   virtual bool addPlayer(int index);
   virtual bool removePlayer(int index);
 };
 
-SteamrollerRace steamrollerRace;
+steamrollerRaceHandler steamrollerRace;
+
+
+/** Custom map object class definition **/
 
 typedef struct SpawnZone
 {
@@ -126,9 +134,7 @@ typedef struct SpawnZone
 
 std::map <int, SpawnZone> SpawnZones;
 
-BZ_PLUGIN(SteamrollerRace)
-
-void SteamrollerRace::Init(const char*config)
+void steamrollerRaceHandler::Init(const char* /*commandLine*/)
 {
   // In the event that the plugin is loaded while the server is already
   // running with players, initialize our current player list.
@@ -157,24 +163,28 @@ void SteamrollerRace::Init(const char*config)
   bz_debugMessage(4, "steamrollerRace plugin loaded");
 }
 
-void SteamrollerRace::Cleanup(void)
+void steamrollerRaceHandler::Cleanup(void)
 {
   // Add any clean-up/shutdown stuff here.
 
   bz_removeCustomMapObject(_OBJECT_NAME);
-  bz_removeCustomSlashCommand(_COMMAND_NAME);
-  bz_debugMessage(4, "steamrollerRace plugin unloaded");
+
   Flush();
+
+  bz_removeCustomSlashCommand(_COMMAND_NAME);
+
+  bz_debugMessage(4, "steamrollerRace plugin unloaded");
 }
 
-SteamrollerRace::SteamrollerRace()
+steamrollerRaceHandler::steamrollerRaceHandler()
 {
   currentID = lowestID = highestID = -1;
   isgrabed = false;
   isfrozen = true;
 }
 
-void SteamrollerRace::Event(bz_EventData *eventData) {
+void steamrollerRaceHandler::Event(bz_EventData *eventData)
+{
   switch (eventData->eventType)
   {
   case bz_ePlayerJoinEvent: //A player joins the game
@@ -183,6 +193,18 @@ void SteamrollerRace::Event(bz_EventData *eventData) {
 
     if (joindata->record->team != eObservers)
       addPlayer(joindata->playerID);
+
+    // Members for bz_PlayerJoinPartEventData:
+
+    // int playerID: The player ID
+    // bz_eTeamType team: The player's team
+    // bzApiString callsign: Their callsign
+    // bzApiString email: Their email
+    // bool verified: Whether or not they're verified (registered + identified)
+    // bzApiString globalUser: BZID (when using global auth)
+    // bzApiString ipAddress: Player's IP address
+    // bzApiString reason: /part or /quit reason (for parting only)
+    // double time: The game time (in seconds)
 
   }
   break;
@@ -401,13 +423,14 @@ void SteamrollerRace::Event(bz_EventData *eventData) {
 
   }
 }
+bool steamrollerRaceHandler::SlashCommand(int playerID, bz_ApiString command, bz_ApiString message, bz_APIStringList* params)
+{
+  // Handle the command "oc" here.
 
-bool SteamrollerRace::SlashCommand(int playerID, bz_ApiString command, bz_ApiString message, bz_APIStringList* params) {
-
-  return true;
+  return false;
 }
 
-bool SteamrollerRace::MapObject(bz_ApiString object, bz_CustomMapObjectInfo *data)
+bool steamrollerRaceHandler::MapObject(bz_ApiString object, bz_CustomMapObjectInfo *data)
 {
   if (object != _OBJECT_NAME || !data)
     return false;
@@ -483,7 +506,7 @@ bool SteamrollerRace::MapObject(bz_ApiString object, bz_CustomMapObjectInfo *dat
   return true;
 }
 
-bool SteamrollerRace::addPlayer(int index)
+bool steamrollerRaceHandler::addPlayer(int index)
 {
   bz_BasePlayerRecord *playerRecord;
   if ((playerRecord = bz_getPlayerByIndex(index)) != NULL) {
@@ -504,7 +527,7 @@ bool SteamrollerRace::addPlayer(int index)
   return false;
 }
 
-bool SteamrollerRace::removePlayer(int index)
+bool steamrollerRaceHandler::removePlayer(int index)
 {
   std::map<int, Player>::iterator itr = players.find(index);
   if (itr != players.end())
@@ -515,6 +538,8 @@ bool SteamrollerRace::removePlayer(int index)
 
   return false;
 }
+
+BZ_PLUGIN(steamrollerRaceHandler)
 
 // Local Variables: ***
 // mode:C++ ***
